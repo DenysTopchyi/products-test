@@ -49,9 +49,9 @@ Then the resulting table shows 5 products (across pages)
 
 ## Estimation
 
-Estimated: n hours
+Estimated: 5 hours
 
-Spent: x hours
+Spent: 4 hours
 
 ## Solution
 
