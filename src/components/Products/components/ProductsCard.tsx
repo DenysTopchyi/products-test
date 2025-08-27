@@ -3,6 +3,7 @@ import AppPagination from "@/components/AppPagination/AppPagination";
 import type { Product } from "@/store/products";
 import ProductsTable from "./ProductsTable";
 import ProductsLoading from "./ProductsLoading";
+import { Menu } from "lucide-react";
 
 type Props = {
     products: Product[];
@@ -12,6 +13,7 @@ type Props = {
     page: number;
     pageSize: number;
     setPage: (p: number) => void;
+    onToggleSidebar?: () => void;
 };
 
 export default function ProductsCard({
@@ -22,10 +24,19 @@ export default function ProductsCard({
     page,
     pageSize,
     setPage,
+    onToggleSidebar,
 }: Props) {
     return (
         <Card className="min-h-[780px] flex flex-col">
             <CardHeader className="flex flex-row items-center justify-between">
+                {onToggleSidebar && (
+                    <button
+                        onClick={onToggleSidebar}
+                        className="lgx:hidden p-2 rounded hover:bg-gray-100"
+                    >
+                        <Menu className="h-5 w-5" />
+                    </button>
+                )}
                 <CardTitle>Products</CardTitle>
                 <div className="text-sm text-gray-500">
                     {loading ? "Loading..." : `Total: ${total}`}
@@ -56,13 +67,15 @@ type ProductsBodyProps = {
 };
 
 function ProductsBody({ loading, error, products }: ProductsBodyProps) {
-    if (loading) return <ProductsLoading />;
+    if (loading) {
+        return <ProductsLoading />;
+    }
 
     if (error) {
         return <div className="flex-1 flex items-center justify-center text-red-600">{error}</div>;
     }
 
-    if (products.length === 0) {
+    if (!products.length) {
         return (
             <div className="flex-1 flex items-center justify-center text-gray-500">No products</div>
         );

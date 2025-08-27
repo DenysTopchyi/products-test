@@ -49,7 +49,7 @@ interface ProductsState {
     fetchProducts: () => Promise<void>;
 }
 
-const PAGE_SIZE = 7;
+const PAGE_SIZE = 12;
 
 let abortCtrl: AbortController | null = null;
 let reqSeq = 0;
@@ -107,14 +107,23 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
         set({ loading: true, error: null });
 
         try {
-            const params = mapToQuery(page, pageSize, filters, sortBy, sortOrder);
+            const params = mapToQuery({
+                page,
+                pageSize,
+                filters,
+                sortBy,
+                sortOrder,
+            });
             const { data, total } = await getProducts(params, signal);
 
             if (mySeq !== reqSeq) return;
 
             set({ products: data, total, loading: false });
         } catch (e: any) {
-            if (e?.name === "CanceledError" || e?.name === "AbortError") return;
+            if (e?.name === "CanceledError" || e?.name === "AbortError") {
+                return;
+            }
+
             set({ error: e?.message ?? "Failed to load", loading: false });
         }
     },

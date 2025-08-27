@@ -1,13 +1,21 @@
 import type { Filters, SortField, SortOrder } from "@/store/products";
 import type { GetProductsParams } from "@/lib/products-api";
 
-export function mapToQuery(
-    page: number,
-    pageSize: number,
-    filters: Filters,
-    sortBy: SortField | "",
-    sortOrder: SortOrder
-): GetProductsParams {
+type MapToQueryArgs = {
+    page: number;
+    pageSize: number;
+    filters: Filters;
+    sortBy: SortField | "";
+    sortOrder: SortOrder;
+};
+
+export function mapToQuery({
+    page,
+    pageSize,
+    filters,
+    sortBy,
+    sortOrder,
+}: MapToQueryArgs): GetProductsParams {
     return {
         _page: page,
         _limit: pageSize,

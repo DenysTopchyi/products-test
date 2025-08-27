@@ -51,6 +51,9 @@ module.exports = {
                     5: "hsl(var(--chart-5))",
                 },
             },
+            screens: {
+                lgx: "968px",
+            },
         },
     },
     plugins: [require("tailwindcss-animate")],

@@ -17,35 +17,44 @@ type Props = {
     siblingCount?: number;
 };
 
-function getPageRange(current: number, totalPages: number, siblingCount = 1) {
-    const totalNumbers = siblingCount * 2 + 5;
+const FIRST_PAGE = 1;
+const SINGLE_STEP = 1;
+const BASE_CORE_BUTTONS = 5;
+const LEFT_EDGE_GAP_AFTER = 2;
+const RIGHT_EDGE_GAP_BEFORE = 1;
+const ELLIPSIS = "ellipsis" as const;
+type PageToken = number | typeof ELLIPSIS;
+
+function getPageRange(current: number, totalPages: number, siblingCount = 1): PageToken[] {
+    const totalNumbers = siblingCount * 2 + BASE_CORE_BUTTONS;
+
     if (totalPages <= totalNumbers) {
         return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
-    const leftSibling = Math.max(current - siblingCount, 1);
+    const leftSibling = Math.max(current - siblingCount, FIRST_PAGE);
     const rightSibling = Math.min(current + siblingCount, totalPages);
 
-    const showLeftEllipsis = leftSibling > 2;
-    const showRightEllipsis = rightSibling < totalPages - 1;
+    const showLeftEllipsis = leftSibling > LEFT_EDGE_GAP_AFTER;
+    const showRightEllipsis = rightSibling < totalPages - RIGHT_EDGE_GAP_BEFORE;
 
-    const pages: Array<number | "ellipsis"> = [];
+    const pages: PageToken[] = [];
 
-    pages.push(1);
+    pages.push(FIRST_PAGE);
 
     if (showLeftEllipsis) {
-        pages.push("ellipsis");
+        pages.push(ELLIPSIS);
     }
 
-    const start = showLeftEllipsis ? leftSibling : 2;
-    const end = showRightEllipsis ? rightSibling : totalPages - 1;
+    const start = showLeftEllipsis ? leftSibling : FIRST_PAGE + SINGLE_STEP;
+    const end = showRightEllipsis ? rightSibling : totalPages - SINGLE_STEP;
 
     for (let p = start; p <= end; p++) {
         pages.push(p);
     }
 
     if (showRightEllipsis) {
-        pages.push("ellipsis");
+        pages.push(ELLIPSIS);
     }
 
     pages.push(totalPages);
@@ -60,16 +69,17 @@ export default function AppPagination({
     onChange,
     siblingCount = 1,
 }: Props) {
-    const totalPages = Math.max(1, Math.ceil(total / pageSize));
-    const canPrev = page > 1;
-    const canNext = page < totalPages;
+    const totalPages = Math.max(FIRST_PAGE, Math.ceil(total / pageSize));
+    const canGoPrev = page > FIRST_PAGE;
+    const canGoNext = page < totalPages;
+
     const range = React.useMemo(
         () => getPageRange(page, totalPages, siblingCount),
         [page, totalPages, siblingCount]
     );
 
     const goto = (p: number) => {
-        const next = Math.min(Math.max(1, p), totalPages);
+        const next = Math.min(Math.max(FIRST_PAGE, p), totalPages);
         if (next !== page) onChange(next);
     };
 
@@ -84,14 +94,14 @@ export default function AppPagination({
                 <PaginationItem>
                     <PaginationPrevious
                         href="#"
-                        onClick={(e) => onLink(e, page - 1)}
-                        aria-disabled={!canPrev}
-                        className={!canPrev ? "pointer-events-none opacity-50" : ""}
+                        onClick={(e) => onLink(e, page - SINGLE_STEP)}
+                        aria-disabled={!canGoPrev}
+                        className={!canGoPrev ? "pointer-events-none opacity-50" : ""}
                     />
                 </PaginationItem>
 
                 {range.map((item, idx) =>
-                    item === "ellipsis" ? (
+                    item === ELLIPSIS ? (
                         <PaginationItem key={`e-${idx}`}>
                             <PaginationEllipsis />
                         </PaginationItem>
@@ -111,9 +121,9 @@ export default function AppPagination({
                 <PaginationItem>
                     <PaginationNext
                         href="#"
-                        onClick={(e) => onLink(e, page + 1)}
-                        aria-disabled={!canNext}
-                        className={!canNext ? "pointer-events-none opacity-50" : ""}
+                        onClick={(e) => onLink(e, page + SINGLE_STEP)}
+                        aria-disabled={!canGoNext}
+                        className={!canGoNext ? "pointer-events-none opacity-50" : ""}
                     />
                 </PaginationItem>
             </PaginationContent>

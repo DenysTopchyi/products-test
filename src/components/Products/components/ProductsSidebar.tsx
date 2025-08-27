@@ -57,7 +57,7 @@ export default function ProductsSidebar({
     ];
 
     return (
-        <Card className="min-h-[780px]">
+        <Card className="max-h-fit lgx:sticky lgx:top-0 lgx:left-0">
             <CardHeader>
                 <CardTitle>Filters</CardTitle>
             </CardHeader>
