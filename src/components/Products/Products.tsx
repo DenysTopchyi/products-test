@@ -26,15 +26,19 @@ export default function Products() {
 
     const [qLocal, setQLocal] = useState(filters.q);
     const [tagLocal, setTagLocal] = useState(filters.tagQuery);
-    const [priceLocal, setPriceLocal] = useState(
-        filters.price === null ? "" : String(filters.price)
+    const [priceMinLocal, setPriceMinLocal] = useState(
+        filters.priceMin == null ? "" : String(filters.priceMin)
+    );
+    const [priceMaxLocal, setPriceMaxLocal] = useState(
+        filters.priceMax == null ? "" : String(filters.priceMax)
     );
 
     const [showFilters, setShowFilters] = useState(false);
 
     const q = useDebouncedValue(qLocal, DEBOUNCE_VALUE);
     const tagQuery = useDebouncedValue(tagLocal, DEBOUNCE_VALUE);
-    const priceDebounced = useDebouncedValue(priceLocal, DEBOUNCE_VALUE);
+    const priceMinDebounced = useDebouncedValue(priceMinLocal, DEBOUNCE_VALUE);
+    const priceMaxDebounced = useDebouncedValue(priceMaxLocal, DEBOUNCE_VALUE);
 
     useEffect(() => {
         if (q !== filters.q) {
@@ -49,11 +53,14 @@ export default function Products() {
     }, [tagQuery]);
 
     useEffect(() => {
-        const parsed = priceDebounced.trim() === "" ? null : Number(priceDebounced);
-        if (parsed !== filters.price) {
-            setFilter("price", parsed);
-        }
-    }, [priceDebounced]);
+        const v = priceMinDebounced.trim() === "" ? null : Number(priceMinDebounced);
+        if (v !== filters.priceMin) setFilter("priceMin", v);
+    }, [priceMinDebounced]);
+
+    useEffect(() => {
+        const v = priceMaxDebounced.trim() === "" ? null : Number(priceMaxDebounced);
+        if (v !== filters.priceMax) setFilter("priceMax", v);
+    }, [priceMaxDebounced]);
 
     useEffect(() => {
         fetchProducts();
@@ -62,7 +69,8 @@ export default function Products() {
         filters.q,
         filters.tagQuery,
         filters.publishedOnly,
-        filters.price,
+        filters.priceMin,
+        filters.priceMax,
         filters.subscription,
         page,
         pageSize,
@@ -72,7 +80,8 @@ export default function Products() {
         resetFilters();
         setQLocal("");
         setTagLocal("");
-        setPriceLocal("");
+        setPriceMinLocal("");
+        setPriceMaxLocal("");
     };
 
     useEffect(() => {
@@ -93,8 +102,10 @@ export default function Products() {
                     setQLocal={setQLocal}
                     tagLocal={tagLocal}
                     setTagLocal={setTagLocal}
-                    priceLocal={priceLocal}
-                    setPriceLocal={setPriceLocal}
+                    priceMinLocal={priceMinLocal}
+                    setPriceMinLocal={setPriceMinLocal}
+                    priceMaxLocal={priceMaxLocal}
+                    setPriceMaxLocal={setPriceMaxLocal}
                     filters={filters}
                     setFilter={setFilter}
                     onReset={handleReset}
@@ -119,8 +130,10 @@ export default function Products() {
                         setQLocal={setQLocal}
                         tagLocal={tagLocal}
                         setTagLocal={setTagLocal}
-                        priceLocal={priceLocal}
-                        setPriceLocal={setPriceLocal}
+                        priceMinLocal={priceMinLocal}
+                        setPriceMinLocal={setPriceMinLocal}
+                        priceMaxLocal={priceMaxLocal}
+                        setPriceMaxLocal={setPriceMaxLocal}
                         filters={filters}
                         setFilter={setFilter}
                         onReset={() => {

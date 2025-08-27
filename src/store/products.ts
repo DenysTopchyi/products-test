@@ -24,7 +24,8 @@ export type SortOrder = "ASC" | "DESC";
 export interface Filters {
     q: string;
     tagQuery: string;
-    price: number | null;
+    priceMin: number | null;
+    priceMax: number | null;
     subscription: "" | "Yes" | "No";
     publishedOnly: boolean;
 }
@@ -67,7 +68,8 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
     filters: {
         q: "",
         tagQuery: "",
-        price: null,
+        priceMin: null,
+        priceMax: null,
         subscription: "",
         publishedOnly: false,
     },
@@ -83,7 +85,14 @@ export const useProductsStore = create<ProductsState>((set, get) => ({
 
     resetFilters: () =>
         set({
-            filters: { q: "", tagQuery: "", price: null, subscription: "", publishedOnly: false },
+            filters: {
+                q: "",
+                tagQuery: "",
+                priceMin: null,
+                priceMax: null,
+                subscription: "",
+                publishedOnly: false,
+            },
             page: 1,
             sortBy: "",
             sortOrder: "ASC",

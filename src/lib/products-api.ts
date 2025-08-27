@@ -8,7 +8,8 @@ export type GetProductsParams = {
     _order?: "ASC" | "DESC";
     q?: string;
     tags_like?: string;
-    price?: number;
+    price_gte?: number;
+    price_lte?: number;
     subscription?: boolean;
     published?: boolean;
 };

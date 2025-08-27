@@ -23,7 +23,10 @@ export function mapToQuery({
         _order: sortBy ? sortOrder : undefined,
         q: filters.q || undefined,
         tags_like: filters.tagQuery || undefined,
-        price: typeof filters.price === "number" ? filters.price : undefined,
+
+        price_gte: typeof filters.priceMin === "number" ? filters.priceMin : undefined,
+        price_lte: typeof filters.priceMax === "number" ? filters.priceMax : undefined,
+
         subscription:
             filters.subscription === "Yes"
                 ? true

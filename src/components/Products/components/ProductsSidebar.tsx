@@ -10,8 +10,10 @@ type Props = {
     setQLocal: (v: string) => void;
     tagLocal: string;
     setTagLocal: (v: string) => void;
-    priceLocal: string;
-    setPriceLocal: (v: string) => void;
+    priceMinLocal: string;
+    setPriceMinLocal: (v: string) => void;
+    priceMaxLocal: string;
+    setPriceMaxLocal: (v: string) => void;
     filters: Filters;
     setFilter: <K extends keyof Filters>(k: K, v: Filters[K]) => void;
     onReset: () => void;
@@ -22,8 +24,10 @@ export default function ProductsSidebar({
     setQLocal,
     tagLocal,
     setTagLocal,
-    priceLocal,
-    setPriceLocal,
+    priceMinLocal,
+    setPriceMinLocal,
+    priceMaxLocal,
+    setPriceMaxLocal,
     filters,
     setFilter,
     onReset,
@@ -45,14 +49,32 @@ export default function ProductsSidebar({
             value: tagLocal,
             onChange: (e: React.ChangeEvent<HTMLInputElement>) => setTagLocal(e.target.value),
         },
+        // {
+        //     id: "price",
+        //     label: "Price (exact)",
+        //     placeholder: "e.g. 30",
+        //     type: "number",
+        //     inputMode: "decimal" as const,
+        //     value: priceLocal,
+        //     onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPriceLocal(e.target.value),
+        // },
         {
-            id: "price",
-            label: "Price (exact)",
+            id: "priceMin",
+            label: "Price from",
             placeholder: "e.g. 30",
             type: "number",
             inputMode: "decimal" as const,
-            value: priceLocal,
-            onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPriceLocal(e.target.value),
+            value: priceMinLocal,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPriceMinLocal(e.target.value),
+        },
+        {
+            id: "priceMax",
+            label: "Price to",
+            placeholder: "e.g. 100",
+            type: "number",
+            inputMode: "decimal" as const,
+            value: priceMaxLocal,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPriceMaxLocal(e.target.value),
         },
     ];
 
