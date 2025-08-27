@@ -5,13 +5,7 @@ import { useDebouncedValue } from "@/lib/useDebounceValue";
 import ProductsSidebar from "./components/ProductsSidebar";
 import ProductsCard from "./components/ProductsCard";
 
-import {
-    Sheet,
-    SheetContent,
-    SheetHeader,
-    SheetTitle,
-    SheetDescription,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 
 const DEBOUNCE_VALUE = 350;
 
